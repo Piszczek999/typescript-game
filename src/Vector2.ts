@@ -50,6 +50,11 @@ export class Vector2 {
     return this._normalized;
   }
 
+  public set(x: number, y: number) {
+    this.x = x;
+    this.y = y;
+  }
+
   public add(vector: Vector2): void {
     if (!vector) return;
     this._x += vector.x;
@@ -62,6 +67,27 @@ export class Vector2 {
     this._x -= vector.x;
     this._y -= vector.y;
     this.resetCachedValues();
+  }
+
+  public multiply(scalar: number | Vector2): void {
+    if (typeof scalar === "number") {
+      this._x *= scalar;
+      this._y *= scalar;
+    } else {
+      this._x *= scalar.x;
+      this._y *= scalar.x;
+    }
+    this.resetCachedValues();
+  }
+
+  public divide(scalar: number): void {
+    if (scalar !== 0) {
+      this._x /= scalar;
+      this._y /= scalar;
+      this.resetCachedValues();
+    } else {
+      throw new Error("Division by zero.");
+    }
   }
 
   public normalize(): void {
@@ -92,5 +118,22 @@ export class Vector2 {
   static subtract(v1: Vector2, v2: Vector2): Vector2 {
     if (!v1 || !v2) return new Vector2(0, 0);
     return new Vector2(v1.x - v2.x, v1.y - v2.y);
+  }
+
+  static multiply(arg1: Vector2, arg2: number | Vector2): Vector2 {
+    if (!arg1) return new Vector2(0, 0);
+    if (typeof arg2 === "number") {
+      return new Vector2(arg1.x * arg2, arg1.y * arg2);
+    } else {
+      return new Vector2(arg1.x * arg2.x, arg1.y * arg2.y);
+    }
+  }
+
+  static divide(vector: Vector2, scalar: number): Vector2 {
+    if (!vector) return new Vector2(0, 0);
+    if (scalar === 0) {
+      throw new Error("Division by zero.");
+    }
+    return new Vector2(vector.x / scalar, vector.y / scalar);
   }
 }

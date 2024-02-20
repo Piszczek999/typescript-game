@@ -2,36 +2,25 @@ import { Vector2 } from "./Vector2.js";
 
 export const movement = new Vector2(0, 0);
 
+const keys = {};
+
 document.addEventListener("keydown", (event) => {
-  switch (event.code) {
-    case "KeyW":
-      movement.y = -1;
-      break;
-    case "KeyA":
-      movement.x = -1;
-      break;
-    case "KeyS":
-      movement.y = 1;
-      break;
-    case "KeyD":
-      movement.x = 1;
-      break;
-  }
+  keys[event.code] = true;
+  updateMovement();
 });
 
 document.addEventListener("keyup", (event) => {
-  switch (event.code) {
-    case "KeyW":
-      if (movement.y === -1) movement.y = 0;
-      break;
-    case "KeyA":
-      if (movement.x === -1) movement.x = 0;
-      break;
-    case "KeyS":
-      if (movement.y === 1) movement.y = 0;
-      break;
-    case "KeyD":
-      if (movement.x === 1) movement.x = 0;
-      break;
-  }
+  keys[event.code] = false;
+  updateMovement();
 });
+
+export function updateMovement() {
+  movement.set(0, 0);
+  if (keys["KeyW"]) movement.y -= 1;
+  if (keys["KeyA"]) movement.x -= 1;
+  if (keys["KeyS"]) movement.y += 1;
+  if (keys["KeyD"]) movement.x += 1;
+}
+
+// Optionally, you can call updateMovement() in your game loop or any update loop
+// setInterval(updateMovement, 1000 / your_desired_updates_per_second);
